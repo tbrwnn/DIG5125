@@ -1,0 +1,28 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+#grayscale
+image = cv2.imread('image.jpg')
+
+#convert  bgr tp rgb
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+#calculate histogram
+hist_r = cv2.calcHist([image],[0], None, [256], [0, 256])
+hist_g = cv2.calcHist([image],[1], None, [256], [0, 256])
+hist_b = cv2.calcHist([image],[2], None, [256], [0, 256])
+
+#generate X values ()
+x_values = np.arange(256)
+
+#plot tge histograms
+plt.figure()
+plt.bar(x_values, hist_r.ravel(), color='red',alpha=0.5, label='Red channel')
+plt.bar(x_values, hist_g.ravel(), color='green',alpha=0.5, label='Green channel')
+plt.bar(x_values, hist_b.ravel(), color='blue',alpha=0.5, label='Blue channel')
+plt.title('grayscale Histogram')
+plt.xlabel('pixel Value')
+plt.ylabel('Frequency')
+plt.legend()
+plt.show()
