@@ -2,6 +2,9 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.signal as sci
+from tkinter import filedialog
+
 
 def conovolution(img_dir, effect=None):
 
@@ -10,9 +13,12 @@ def conovolution(img_dir, effect=None):
 
     # checks for effects
     if effect == '1':
-        image_output = cv2.GaussianBlur(image, (5, 5), 0) # Blur function taken from cv
+        image_output = cv2.GaussianBlur(image, (55, 55),9) #Blur function taken from cv
     elif effect == '2':
         image_output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Converts image to gray scale
+    elif effect == '3':
+        kernel = np.ones((dimsx,dimsy),np.float32)/(dimsx*dimsy)
+        image_output = cv2.filter2D(image,-1,kernel)
     else:
         image_output = image
 
@@ -43,7 +49,7 @@ def conovolution(img_dir, effect=None):
 
 
 # Ask for User Input
-print('Image editing - 1: Blur, 2: Grayscale')
+print('Image editing - 1: Blur, 2: Grayscale, 3: motion blur ')
 user = input('Enter one of the numbers: ')
 
 effect = None
@@ -54,8 +60,14 @@ if user == '1':
 elif user == '2':
     effect = user
     print('Gray Scale Selected')
+elif user == '3':
+    effect = user
+    print('Motion blur selected')
+    
+    dimsx = int(input('select motion dimentions y direction '))
+    dimsy =int( input('select motion dimentions x direction '))
 else:
     print('invalid')
     user = input('Enter one of the numbers: ')
-
-conovolution('coursework/R.jpg', effect)
+img_dir = filedialog.askopenfilename()
+conovolution(img_dir, effect)
